@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -6,6 +6,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MyDialog from './dialog';
+
+import { ShopersContext } from '../App';
 
 const useStyles = makeStyles({
     root: {
@@ -30,20 +32,13 @@ const useStyles = makeStyles({
     }
   });
 
-const shopers = [{email: 'shopper1@gmail.com', name: 'shopper1', status: 'F'}, 
-                 {email: 'shopper2@gmail.com', name: 'shopper2', status: 'F'},
-                 {email: 'shopper3@gmail.com', name: 'shopper3', status: 'F'},
-                 {email: 'shopper4@gmail.com', name: 'shopper4', status: 'F'},
-                 {email: 'shopper5@gmail.com', name: 'shopper5', status: 'F'},
-                 {email: 'shopper6@gmail.com', name: 'shopper6', status: 'F'},
-                 {email: 'shopper7@gmail.com', name: 'shopper7', status: 'F'} ];
-
-
 
 function CardElement(props) {
 
+    const shopersContext = useContext(ShopersContext)
+
     const classes = useStyles();
-    const [selectedShoper, setSelectedShoper ] = React.useState()
+    const [selectedShoper, setSelectedShoper ] = React.useState({})
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
@@ -52,11 +47,11 @@ function CardElement(props) {
       const handleClose = (value) => {
         setOpen(false);
         setSelectedShoper();
-        shopers.forEach(element => {
+        /*shopersContext.shopers.forEach(element => {
             if (value != null && element.email === value.email) {
                 element.status = element.status === 'F' ? 'A' : 'F'
             }
-        });
+        });*/
 
 
       };
@@ -76,7 +71,7 @@ function CardElement(props) {
         </CardContent>
         <CardActions>
           <Button size="small" onClick={handleClickOpen}>Asignar Shoper</Button>
-          <MyDialog selectedShoper={selectedShoper} shopers={shopers} open={open} onClose={handleClose}></MyDialog>
+          <MyDialog selectedShoper={selectedShoper} shopers={shopersContext.shopersState} open={open} onClose={handleClose}></MyDialog>
         </CardActions>
       </Card>
       )
@@ -89,6 +84,7 @@ var add_minutes =  function (dt, minutes) {
 
 function Schedules(props) {
 
+    const shopersContext = useContext(ShopersContext)
     const items = []
 
     var from = props.from
@@ -104,7 +100,11 @@ function Schedules(props) {
         items.push({timeAvailable: i, idx: idx})
     }
 
-    const listSchedules = items.map((item) => 
+    //shopersContext.schedulesDispatch({operation: 'setSchedules', schedules: { items } })
+
+    console.log('schedules ' + shopersContext.schedulesState)
+    
+    const listSchedules = shopersContext.schedulesState.map((item) => 
         <div key={item.idx}> <CardElement time={item.timeAvailable.toLocaleTimeString() } /> <br></br>
         </div>
     )
