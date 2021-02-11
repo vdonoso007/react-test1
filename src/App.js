@@ -17,6 +17,14 @@ const reducer = (state, action ) => {
   switch (action.operation) {
     case 'add':
       return [ ...state, action.shoper ]
+    case 'updateStatus':
+      const result = state.filter((value) => {
+        return value.email === action.shoper.email
+      })
+      if (result && result.length > 0) {
+        result[0].status = result[0].status === 'F' ? 'A' : 'F'
+      }
+      return state;
     case 'reset':
       return initialState
     default:
@@ -28,11 +36,6 @@ const schedulesReducer = (state, action) => {
   switch (action.operation) {
     case 'setSchedules':
       return [ ...state, action.schedules ]
-      //return action.schedules
-    case 'updateStatus':
-      
-      return;
-  
     default:
       return state;
   }

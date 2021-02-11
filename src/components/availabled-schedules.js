@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -38,7 +38,7 @@ function CardElement(props) {
     const shopersContext = useContext(ShopersContext)
 
     const classes = useStyles();
-    const [selectedShoper, setSelectedShoper ] = React.useState({})
+    const [selectedShoper, setSelectedShoper ] = React.useState(null)
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
@@ -46,13 +46,11 @@ function CardElement(props) {
     
       const handleClose = (value) => {
         setOpen(false);
-        setSelectedShoper();
-        /*shopersContext.shopers.forEach(element => {
-            if (value != null && element.email === value.email) {
-                element.status = element.status === 'F' ? 'A' : 'F'
-            }
-        });*/
-
+        if (value) {
+          setSelectedShoper(value);
+          shopersContext.shopersDispatch({ operation: 'updateStatus', shoper: value })
+          setSelectedShoper(null)
+        }
 
       };
 
@@ -78,14 +76,10 @@ function CardElement(props) {
 
 }
 
-var add_minutes =  function (dt, minutes) {
-    return new Date(dt.getTime() + minutes*60000);
-}
-
 function Schedules(props) {
 
     const shopersContext = useContext(ShopersContext)
-    const items = []
+    const [i, setI] = useState()
 
     var from = props.from
     var to = props.to
@@ -94,18 +88,21 @@ function Schedules(props) {
     var fromDate = new Date(from)
     var toDate = new Date(to)
 
-    var idx =0;
-    for(var i=fromDate; i<=toDate; i = add_minutes(i, steps) ) {
-        idx +=1;
-        items.push({timeAvailable: i, idx: idx})
-    }
+    useEffect(() => {
 
-    //shopersContext.schedulesDispatch({operation: 'setSchedules', schedules: { items } })
+      const add_minutes =  (dt, minutes) => {
+          return new Date(dt.getTime() + minutes*60000);
+      }
 
-    console.log('schedules ' + shopersContext.schedulesState)
+      for(var i=fromDate; i<=toDate; i = add_minutes(i, steps) ) {
+          setI(i)
+          shopersContext.schedulesDispatch({operation: 'setSchedules', schedules: {timeAvailable: i} })
+      }
+
+    }, [])
     
-    const listSchedules = shopersContext.schedulesState.map((item) => 
-        <div key={item.idx}> <CardElement time={item.timeAvailable.toLocaleTimeString() } /> <br></br>
+    const listSchedules = shopersContext.schedulesState.map((item, index) => 
+        <div key={index}> <CardElement time={item.timeAvailable.toLocaleTimeString() } /> <br></br>
         </div>
     )
 

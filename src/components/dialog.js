@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -35,16 +35,18 @@ export default function MyDialog(props) {
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
       <List>
-        {shopers.map((shoper) => (
-          <ListItem button onClick={() => handleListItemClick(shoper)} key={shoper.email}>
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-        <ListItemText>{shoper.email} - {shoper.name} - {shoper.status}</ListItemText>
-          </ListItem>
-        ))}
+        {
+          shopers.map((shoper) => (
+            <ListItem button onClick={() => handleListItemClick(shoper)} key={shoper.email}>
+              <ListItemAvatar>
+                <Avatar className={classes.avatar}>
+                  <PersonIcon />
+                </Avatar>
+              </ListItemAvatar>
+          <ListItemText>{shoper.email} - {shoper.name} - {shoper.status}</ListItemText>
+            </ListItem>
+          ))
+        }
 
       </List>
     </Dialog>
@@ -54,5 +56,5 @@ export default function MyDialog(props) {
 MyDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  selectedShoper: PropTypes.object.isRequired
+  selectedShoper: PropTypes.object
 };
