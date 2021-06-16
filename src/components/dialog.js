@@ -21,12 +21,14 @@ export default function MyDialog(props) {
     onClose(value);
   };
 
+  const data = shopers.filter((item) => item.status === 'F')
+
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
       <List>
         {
-          shopers.map((shoper, index) => (
+          data.map((shoper, index) => (
             <ListItem button onClick={() => handleListItemClick(shoper)} key={shoper.email}>
               <ListItemAvatar>
                 <Avatar alt="Natacha" src={`/static/images/avatar/${index+1}.jpg`} />
