@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
+import React, { } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -8,26 +7,17 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import PersonIcon from '@material-ui/icons/Person';
-import { blue } from '@material-ui/core/colors';
-
-const useStyles = makeStyles({
-  avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
-  },
-});
 
 export default function MyDialog(props) {
-  const classes = useStyles();
+  
   const { onClose, open, shopers, selectedShoper } = props;
 
   const handleClose = () => {
-    onClose(selectedShoper);
+    //onClose(selectedShoper)
+    onClose()
   };
 
   const handleListItemClick = (value) => {
-
     onClose(value);
   };
 
@@ -36,12 +26,13 @@ export default function MyDialog(props) {
       <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
       <List>
         {
-          shopers.map((shoper) => (
+          shopers.map((shoper, index) => (
             <ListItem button onClick={() => handleListItemClick(shoper)} key={shoper.email}>
               <ListItemAvatar>
-                <Avatar className={classes.avatar}>
+                <Avatar alt="Natacha" src={`/static/images/avatar/${index+1}.jpg`} />
+                {/* <Avatar className={classes.avatar}>
                   <PersonIcon />
-                </Avatar>
+                </Avatar> */}
               </ListItemAvatar>
           <ListItemText>{shoper.email} - {shoper.name} - {shoper.status}</ListItemText>
             </ListItem>

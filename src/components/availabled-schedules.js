@@ -6,6 +6,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MyDialog from './dialog';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 
 import { ShopersContext } from '../App';
 
@@ -43,18 +45,19 @@ function CardElement(props) {
     const handleClickOpen = () => {
         setOpen(true);
       };
-    
+
       const handleClose = (value) => {
-        setOpen(false);
         if (value) {
           setSelectedShoper(value);
           shopersContext.shopersDispatch({ operation: 'updateStatus', shoper: value })
-          setSelectedShoper(null)
         }
-
+        setOpen(false);
       };
 
-    
+      const handleDelete = () => {
+        shopersContext.shopersDispatch({ operation: 'updateStatus', shoper: selectedShoper})
+        setSelectedShoper(null)
+      }
     
 
     return (
@@ -70,6 +73,14 @@ function CardElement(props) {
         <CardActions>
           <Button size="small" onClick={handleClickOpen}>Asignar Shoper</Button>
           <MyDialog selectedShoper={selectedShoper} shopers={shopersContext.shopersState} open={open} onClose={handleClose}></MyDialog>
+          {
+            selectedShoper != null && selectedShoper.status === 'A' &&
+            <Chip
+              avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
+              label={selectedShoper.name}
+              onDelete={handleDelete}
+            />
+          }
         </CardActions>
       </Card>
       )
